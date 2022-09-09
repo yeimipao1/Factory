@@ -14,6 +14,14 @@ public class ProyectoApplication {
 	public String hello(){
 		return "Hola Mundo";
 	}
+	
+	@GetMapping("/test")
+	public String test(){
+		Empresa enterprise = new Empresa("nueva", "av. santafe", "321786954", "");
+		
+		
+		return "Hola Mundo";
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoApplication.class, args);
