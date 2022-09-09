@@ -1,5 +1,6 @@
 package com.SoftFactory.proyecto;
 
+import com.SoftFactory.proyecto.Entidades.Empresa;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -21,6 +22,12 @@ public class ProyectoApplication {
 		
 		
 		return "Hola Mundo";
+	}
+	@GetMapping("/test")
+	public String test(){
+		Empresa fact = new Empresa("SoftFactory", "av.santafe", 31087632,"119888546");
+
+		return fact.getNombreEmpresa();
 	}
 
 	public static void main(String[] args) {
