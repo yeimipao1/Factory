@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="htt://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Empresas </title>
+    <meta name="viewport"content="width=device-width,initial-scale=1">
+
+</head>
+<body>
+<div class="container">
+<h1>Lista de Empresas</h1><br>
+    <!--Dibujamos la tabla-->
+ <table class="table">
+     <tr>
+         <th>ID</th>
+         <th>Nombre</th>
+         <th>Dirección</th>
+         <th>Telefono</th>
+         <th>NIT</th>
+         <th>Editar</th>
+         <th>Eliminar</th>
+
+     </tr>
+     <!--llenamos la tabla dibujada-->
+     <tr th:each="empresa : ${factlist}">
+
+     </tr>
+ </table>
+</div>
+</body>
+</html>

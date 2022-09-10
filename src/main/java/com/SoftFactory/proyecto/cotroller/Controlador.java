@@ -14,7 +14,7 @@ public class Controlador {
     @Autowired
     EmpresaServi empresaServi;
 
-    @GetMapping ({"/Empresa","/VerListaEmpresas"})
+    @GetMapping ({"/","/VerListaEmpresas"})
     public String viewEmpresas(Model model){
         List<Empresa> listaEmpresas=empresaServi.getAllEmpresa();
         model.addAttribute("factlist",listaEmpresas);
