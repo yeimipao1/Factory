@@ -18,6 +18,6 @@ public class Controlador {
     public String viewEmpresas(Model model){
         List<Empresa> listaEmpresas=empresaServi.getAllEmpresa();
         model.addAttribute("factlist",listaEmpresas);
-        return "verListaEmpresas";
+        return "verListaEmpresas"; //llamamos al HTML
     }
 }
