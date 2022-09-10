@@ -1,4 +1,5 @@
-package com.SoftFactory.proyecto.Entidades;
+/*package com.SoftFactory.proyecto.Entidades;
 
 public enum Enum_RolName {
 }
+*/

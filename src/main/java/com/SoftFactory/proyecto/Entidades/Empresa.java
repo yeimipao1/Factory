@@ -10,10 +10,6 @@ public class Empresa {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToMany
-
-    private Empleado employee;
-
     private String nombreEmpresa;
 
     private String direccion;
@@ -38,14 +34,6 @@ public class Empresa {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Empleado getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Empleado employee) {
-        this.employee = employee;
     }
 
     public String getNombreEmpresa() {
