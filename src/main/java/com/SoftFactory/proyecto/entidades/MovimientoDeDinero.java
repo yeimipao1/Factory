@@ -1,4 +1,4 @@
-/*package com.SoftFactory.proyecto.Entidades;
+package com.SoftFactory.proyecto.entidades;
 
 
 import javax.persistence.*;
@@ -6,27 +6,23 @@ import javax.persistence.*;
 @Entity
 @Table(name = "MovimientoDeDinero")
 public class MovimientoDeDinero {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = " id ", nullable = false)
-
-    //ATRIBUTOS
     private int id;
-
-    private double montoDelMovimiento;
-
+    private long montoDelMovimiento;
     private String conceptoMovimiento;
-    // @ManyToOne
-    // @JoinColumn ( name = " empleado_id " )
-    // private  Empleado usuario;
+    @ManyToOne
+    @JoinColumn(name = "empleado_id")
+    private Empleado usuario;
 
     public MovimientoDeDinero() {
     }
 
-    public MovimientoDeDinero(double montoDelMovimiento, String conceptoMovimiento) {
+    public MovimientoDeDinero(long montoDelMovimiento, String conceptoMovimiento, Empleado usuario) {
         this.montoDelMovimiento = montoDelMovimiento;
         this.conceptoMovimiento = conceptoMovimiento;
+        this.usuario = usuario;
     }
 
     public int getId() {
@@ -37,11 +33,11 @@ public class MovimientoDeDinero {
         this.id = id;
     }
 
-    public double getMontoDelMovimiento() {
+    public long getMontoDelMovimiento() {
         return montoDelMovimiento;
     }
 
-    public void setMontoDelMovimiento(double montoDelMovimiento) {
+    public void setMontoDelMovimiento(long montoDelMovimiento) {
         this.montoDelMovimiento = montoDelMovimiento;
     }
 
@@ -52,4 +48,12 @@ public class MovimientoDeDinero {
     public void setConceptoMovimiento(String conceptoMovimiento) {
         this.conceptoMovimiento = conceptoMovimiento;
     }
-}*/
+
+    public Empleado getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Empleado usuario) {
+        this.usuario = usuario;
+    }
+}

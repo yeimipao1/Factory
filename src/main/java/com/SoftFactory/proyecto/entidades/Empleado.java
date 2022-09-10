@@ -1,4 +1,4 @@
-package com.SoftFactory.proyecto.Entidades;
+package com.SoftFactory.proyecto.entidades;
 
 import javax.persistence.*;
 
