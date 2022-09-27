@@ -18,25 +18,36 @@ public class EmpresaServi {
         empresaRepo.findAll().forEach(empresa -> empresaList.add(empresa));//recorremos la
         return empresaList;
     }
-    //metodo que trae un objetode tipo emprescuando cuento con el id de la misma
+    //metodo que trae un objetode tipo empresa cuando cuento con el ID de la empresa
     public Empresa getEmpresaById(Integer id){
         return empresaRepo.findById(id).get();
     }
 
-    //Metodo para guardar o actualizar objetos de tipo Empresa
+    //Método para guardar o actualizar objetos de tipo Empresa (para el @controller)
     public boolean saveOrUpdateEmpresa(Empresa empresa){
-        Empresa fact=empresaRepo.save(empresa);
-        if (empresaRepo.findById((int) fact.getId())!=null){
-           return true;
+        Empresa emp=empresaRepo.save(empresa);
+        if (empresaRepo.findById(emp.getId())!=null){
+            return true;
         }
         return false;
     }
+
+
+    //Metodo para el @RestController
+
+  /*  public Empresa saveOrUpdateEmpresa(Empresa empresa){
+        Empresa emp=empresaRepo.save(empresa);
+        return emp;
+    }*/
+
+
     //Metodo para eliminar empresa registradas teniendo el id
+
     public boolean deleEmpresa(Integer id){
         empresaRepo.deleteById(id);
-        if (getEmpresaById(id)!=null){
-            return false;
+        if (empresaRepo.findById(id)!=null){
+            return true;
         }
-        return true;
+        return false;
     }
 }

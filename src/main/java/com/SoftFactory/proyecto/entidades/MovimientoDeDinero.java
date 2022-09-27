@@ -1,31 +1,38 @@
 package com.SoftFactory.proyecto.entidades;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "MovimientoDeDinero")
 public class MovimientoDeDinero {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = " id ", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int id;
     private long montoDelMovimiento;
     private String conceptoMovimiento;
     @ManyToOne
     @JoinColumn(name = "empleado_id")
     private Empleado usuario;
+    @DateTimeFormat(pattern = "yyy-MM-dd")
+    private Date fecha;
 
     public MovimientoDeDinero() {
     }
 
-    public MovimientoDeDinero(long montoDelMovimiento, String conceptoMovimiento, Empleado usuario) {
+    public MovimientoDeDinero(long montoDelMovimiento, String conceptoMovimiento, Empleado empleado, Date fecha) {
         this.montoDelMovimiento = montoDelMovimiento;
         this.conceptoMovimiento = conceptoMovimiento;
-        this.usuario = usuario;
+        this.usuario = empleado;
+        this.fecha= fecha;
     }
 
     public int getId() {
+
         return id;
     }
 
@@ -38,14 +45,17 @@ public class MovimientoDeDinero {
     }
 
     public void setMontoDelMovimiento(long montoDelMovimiento) {
+
         this.montoDelMovimiento = montoDelMovimiento;
     }
 
     public String getConceptoMovimiento() {
+
         return conceptoMovimiento;
     }
 
     public void setConceptoMovimiento(String conceptoMovimiento) {
+
         this.conceptoMovimiento = conceptoMovimiento;
     }
 
@@ -53,7 +63,16 @@ public class MovimientoDeDinero {
         return usuario;
     }
 
-    public void setUsuario(Empleado usuario) {
-        this.usuario = usuario;
+    public void setUsuario(Empleado empleado) {
+
+        this.usuario = empleado;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 }
