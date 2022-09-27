@@ -1,8 +1,5 @@
-package com.SoftFactory.proyecto.entidades;
+/*package com.SoftFactory.proyecto.Entidades;
 
 public enum Enum_RolName {
-
-    ADMINISTRATIVO,
-    OPERARIO
-
 }
+*/
