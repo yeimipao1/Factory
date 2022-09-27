@@ -2,16 +2,18 @@ package com.SoftFactory.proyecto.cotroller;
 
 import com.SoftFactory.proyecto.entidades.Empleado;
 import com.SoftFactory.proyecto.entidades.Empresa;
+import com.SoftFactory.proyecto.entidades.MovimientoDeDinero;
 import com.SoftFactory.proyecto.servicios.EmpleadoServi;
 import com.SoftFactory.proyecto.servicios.EmpresaServi;
+import com.SoftFactory.proyecto.servicios.MovimientoServi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -23,6 +25,8 @@ public class Controlador {
     @Autowired
     EmpresaServi empresaServi;
     EmpleadoServi empleadoServi;
+
+    MovimientoServi movimientosServi;
     @GetMapping ({"/","/VerListaEmpresas"})
     public String viewEmpresas(Model model){
         List<Empresa> listaEmpresas=empresaServi.getAllEmpresa();
@@ -87,7 +91,7 @@ public class Controlador {
     }
 
     @GetMapping("/AgregarEmpleado")
-    public String newEmpleado(Model model, @ModelAttribute ("mensaje") String mensaje) {
+    public String newEmpleado(Model model, @ModelAttribute("mensaje") String mensaje) {
         Empleado empl = new Empleado();
         model.addAttribute("empl", empl);
         model.addAttribute("mensaje", mensaje);
@@ -148,5 +152,107 @@ public class Controlador {
 
         return "verListaEmpleados";
     }
+
+    @GetMapping("/VerMovimientos")
+    public String verMovimientos(Model model, @ModelAttribute("mensaje") String mensaje) {
+        List<MovimientoDeDinero> listaMovimientos = movimientosServi.getAllMovimientos();
+        model.addAttribute("listMov", listaMovimientos);
+        model.addAttribute("mensaje", mensaje);
+        return "verMovimientos"; //llamamos al HTML
+    }
+
+
+    @GetMapping("/AgregarMovimiento")
+    public String nuevoEmpleado(Model model, @ModelAttribute ("mensaje") String mensaje) {
+        MovimientoDeDinero movi = new MovimientoDeDinero();
+        model.addAttribute("movi", movi);
+        model.addAttribute("mensaje", mensaje);
+        List<Empleado> empleadoList = empleadoServi.getAllEmpleados();
+        model.addAttribute("empleList", empleadoList);
+        return "agregarMovimiento";
+    }
+
+
+
+    @PostMapping("/GuardarMovimiento")
+    public String guardarMovimiento(MovimientoDeDinero mov, RedirectAttributes redirectAttributes) {
+        if(movimientosServi.saveOrUpdateMovimiento(mov)) {
+            redirectAttributes.addFlashAttribute("mensaje", "guaradado");
+            return "redirect:/VerMovimientos";
+        }
+        redirectAttributes.addFlashAttribute("mensaje", "errorGuardar" );
+        return "redirect:/AgregarMovimiento";
+    }
+
+
+    @GetMapping ("/EditarMovimiento/{id}")
+    public String editarMovimiento (Model model, @PathVariable Integer id, @ModelAttribute ("mensaje") String mensaje) {
+        MovimientoDeDinero movi = movimientosServi.getMovimientoById(id);
+        model.addAttribute ("movi" , movi );
+        model.addAttribute("mensaje", mensaje);
+        //Para ver las empresas en el HTML
+        List<Empleado> empleadoList = empleadoServi.getAllEmpleados();
+        model.addAttribute("empleList", empleadoList);
+        return "editarMovimiento" ;
+    }
+
+
+    @PostMapping("/ActualizarMovimiento")
+    public String actualizarMovimiento(@ModelAttribute("empl") MovimientoDeDinero movi, RedirectAttributes redirectAttributes){
+        if(movimientosServi.saveOrUpdateMovimiento(movi)){
+            redirectAttributes.addFlashAttribute("mensaje","actualizado");
+            return "redirect:/VerMovimientos";
+        }
+        redirectAttributes.addFlashAttribute("mensaje","Error al actualizar la empresa");
+        return "redirect:/EditarMovimiento/" + movi.getId();
+    }
+
+
+    @GetMapping("/EliminarMovimiento/{id}")
+    public String eliminarMovimiento(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        if(movimientosServi.deleteMovimiento(id)){
+            redirectAttributes.addFlashAttribute("mensaje","eliminado");
+            return "redirect:/VerMovimientos";
+        }
+        redirectAttributes.addFlashAttribute("mensaje","errorDelete");
+        return "redirect:/VerMovimientos";
+    }
+
+
+    @GetMapping("/Empleado/{id}/Movimientos") //Filtro de movimientos por empleados
+    public String movimientosPorEmpleado(@PathVariable("id")Integer id, Model model){
+        List<MovimientoDeDinero> movlist = movimientosServi.obtenerPorEmpleado(id);
+        model.addAttribute("listMov",movlist);
+        Long sumaMonto=movimientosServi.MontosPorEmpleado(id);
+        model.addAttribute("SumaMontos",sumaMonto);
+        return "verMovimientos"; //Llamamos al HTML
+    }
+
+
+    @GetMapping("/Empresa/{id}/Movimientos") //Filtro de movimientos por empresa
+    public String movimientosPorEmpresa(@PathVariable("id")Integer id, Model model){
+        List<MovimientoDeDinero> movlist = movimientosServi.obtenerPorEmpresa(id);
+        model.addAttribute("listMov",movlist);
+        Long sumaMonto=movimientosServi.MontosPorEmpresa(id);
+        model.addAttribute("SumaMontos",sumaMonto);
+        return "verMovimientos"; //Llamamos al HTML
+    }
+
+
+
+
+    //Controlador que me lleva al template de No autorizado
+    @RequestMapping(value="/Denegado")
+    public String accesoDenegado(){
+        return "accessDenied";
+    }
+
+
+    //Metodo para encriptar contraseñas
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
 
 }
