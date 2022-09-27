@@ -8,8 +8,8 @@ import javax.persistence.*;
 public class Empresa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     private String nombreEmpresa;
 
@@ -29,43 +29,53 @@ public class Empresa {
         this.NIT = NIT;
     }
 
-    public Integer getId() {
+    public int getId() {
+
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
+
         this.id = id;
     }
 
     public String getNombreEmpresa() {
+
         return nombreEmpresa;
     }
 
     public void setNombreEmpresa(String nombreEmpresa) {
+
         this.nombreEmpresa = nombreEmpresa;
     }
 
     public String getDireccion() {
+
         return direccion;
     }
 
     public void setDireccion(String direccion) {
+
         this.direccion = direccion;
     }
 
     public int getTelefono() {
+
         return telefono;
     }
 
     public void setTelefono(int telefono) {
+
         this.telefono = telefono;
     }
 
     public String getNIT() {
+
         return NIT;
     }
 
     public void setNIT(String NIT) {
+
         this.NIT = NIT;
     }
 }
