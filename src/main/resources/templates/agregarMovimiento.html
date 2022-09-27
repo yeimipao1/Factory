@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="htt://www.thymeleaf.org">
+<head>
+    <title>Agregar nuevo Movimiento</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+    a{
+    color:white;
+    }
+    a:hover{
+    color: black;
+    text-decoration:none;
+    }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <p th:inline="text" class="text-right">User: [[${#httpServletRequest.remoteUser}]]</p>
+    <button type="button" class="btn btn-danger" style="float:right"><a th:href="@{/logout}">Cerrar Sesión</a></button>
+    <h1>Agregar datos del movimiento</h1>
+    <br>
+    <!--llenar los datos de la empresa-->
+    <form th:action="@{/GuardarMovimiento}" th:object="${movi}" method="post">
+
+
+        <!--Campo para concepto-->
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label class="col-md-3" for="conceptoMovimiento">Concepto:</label>
+                <div class="col-md-6">
+                    <select th:field="*{conceptoMovimiento}" class="form-control" id="conceptoMovimiento" required="required">
+                        <option th:value=1>Zapato</option>
+                        <option th:value=2>Sandalias</option>
+                        <option th:value=3>Camisa</option>
+                        <option th:value=4>Blusa</option>
+                        <option th:value=5>Pantalón</option>
+                        <option th:value=6>Vestido</option>
+                        <option th:value=7>Falda</option>
+                        <option th:value=8>Sombrero</option>
+                        <option th:value=9>Accesorios</option>
+                        <option th:value=10>Bolso</option>
+                        <option th:value=11>Gorra</option>
+                        <option th:value=12>Brasier</option>
+                        <option th:value=13>Ropa interior</option>
+                        <option th:value=14>Tela</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- cqmpo del monto-->
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label class="col-md-3" for="montoDelMovimiento">Valor del movimiento:</label>
+                <div class="col-md-6">
+                    <input type="number" th:field="*{montoDelMovimiento}" class="form-control" id="montoDelMovimiento" required="required">
+                </div>
+
+            </div>
+        </div>
+
+        <!--Campo para usuario-->
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label class="col-md-3" for="usuario">Empleado Responsable:</label>
+                <div class="col-md-6">
+                    <select th:field="*{usuario}" class="form-control" id="usuario" required="required">
+                        <option th:each="empleado : ${empleList}" th:text="${empleado.nombre}" th:value="${empleado.id}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <!--botones-->
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-success">Registrar movimiento</button>
+            </div>
+        </div>
+
+
+    </form>
+
+    <br>
+    <a href="javascript: history.go(-1)" class="btn btn-info" role="button">Atrás</a>
+
+</div>
+</body>
+</html>

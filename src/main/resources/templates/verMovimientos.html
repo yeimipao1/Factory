@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="htt://www.thymeleaf.org">
+<head>
+    <title>Lista De Movimientos</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <style>
+    a{
+    color:white;
+    }
+    a:hover{
+    text-decoration:none;
+    }
+
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Lista de movimientos</h1>
+    <!--Dibujamos la tabla-->
+    <br>
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th class="text-right">Valor</th>
+            <th>Concepto</th>
+            <th>Responsable</th>
+            <th>Movimientos</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+
+        </tr>
+        <!--llenamos la tabla dibujada-->
+        <!-- En nuestro cotroller , creamos en viewEmpresas un modelo con un atributo llamado listEmpl-->
+        <tr th:each="movimiento : ${listMov}">
+            <td th:text="${movimiento.id}"></td>
+            <td th:text="${movimiento.montoDelMovimiento}"></td>
+            <td th:if="${movimiento.conceptoMovimiento=='1'}">Zapato</td>
+            <td th:if="${movimiento.conceptoMovimiento=='2'}">Sandalia</td>
+            <td th:if="${movimiento.conceptoMovimiento=='3'}">Camisa</td>
+            <td th:if="${movimiento.conceptoMovimiento=='4'}">Blusa</td>
+            <td th:if="${movimiento.conceptoMovimiento=='5'}">Pantalón</td>
+            <td th:if="${movimiento.conceptoMovimiento=='6'}">Vestido</td>
+            <td th:if="${movimiento.conceptoMovimiento=='7'}">Falda</td>
+            <td th:if="${movimiento.conceptoMovimiento=='8'}">Sombrero</td>
+            <td th:if="${movimiento.conceptoMovimiento=='9'}">Accesorios</td>
+            <td th:if="${movimiento.conceptoMovimiento=='10'}">Bolso</td>
+            <td th:if="${movimiento.conceptoMovimiento=='11'}">Gorra</td>
+            <td th:if="${movimiento.conceptoMovimiento=='12'}">Brasier</td>
+            <td th:if="${movimiento.conceptoMovimiento=='13'}">Ropa Interior</td>
+            <td th:if="${movimiento.conceptoMovimiento=='14'}">Telas</td>
+            <td th:text="${movimiento.usuario.nombre}"></td>
+
+            <td><button type="button" class="btn btn-info"><a th:href="@{/Empleado/{id}/Movimientos(id=${movimiento.id})}">Ver</a></button></td>
+            <td><button type="button" class="btn btn-warning"><a th:href="@{/EditarMovimiento/{id}(id=${movimiento.id})}">Editar</a></button></td>
+            <td><button type="button" class="btn btn-danger"><a th:href="@{/EliminarMovimiento/{id}(id=${movimiento.id})}">Eliminar</a></button></td>
+
+        </tr>
+    </table>
+
+    <br>
+    <button type="button" class="btn btn-info"><a th:href="@{/AgregarMovimiento}">Agregar un nuevo movimiento</a></button>
+    <br><br>
+
+    <button type="button" class="btn btn-primary"><a th:href="@{/VerListaEmpresas}">Ver lista de Empresas</a></button>
+    <br><br>
+
+    <button type="button" class="btn btn-primary"><a th:href="@{/VerListaEmpleados}">Ver lista de Empleados</a></button>
+</div>
+
+
+<script th:inline="javascript">
+    window.onload = function(){
+
+        var msm = [[${mensaje}]];
+        if(msm == "guardada"){
+           Command : toastr["success"]("Empresa creada")
+           }
+
+        else if (msm == "actualizada"){
+            Command : toastr["success"]("Empresa actualizada")
+        }
+
+        else if (msm == "eliminada"){
+            Command : toastr["danger"]("Empresa eliminada")
+        }
+
+        else if (msm == "errorDelete"){
+            Command : toastr["error"]("Error al eliminar la empresa")
+        }
+
+
+            toastr.options={
+
+                "positionClass" : "toast-top-right",
+                "showDuration" : "300",
+                "showMethod" : "fadeIn",
+                "showMethod" : "fadeOut",
+
+            }
+
+    }
+
+
+</script>
+
+</body>
+</html>
