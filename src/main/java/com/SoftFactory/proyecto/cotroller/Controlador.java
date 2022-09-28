@@ -3,6 +3,7 @@ package com.SoftFactory.proyecto.cotroller;
 import com.SoftFactory.proyecto.entidades.Empleado;
 import com.SoftFactory.proyecto.entidades.Empresa;
 import com.SoftFactory.proyecto.entidades.MovimientoDeDinero;
+import com.SoftFactory.proyecto.repositorios.MovimientosRepo;
 import com.SoftFactory.proyecto.servicios.EmpleadoServi;
 import com.SoftFactory.proyecto.servicios.EmpresaServi;
 import com.SoftFactory.proyecto.servicios.MovimientoServi;
@@ -24,9 +25,13 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 public class Controlador {
     @Autowired
     EmpresaServi empresaServi;
+    @Autowired
     EmpleadoServi empleadoServi;
-
+    @Autowired
     MovimientoServi movimientosServi;
+
+    @Autowired
+    MovimientosRepo movimientosRepo;
     @GetMapping ({"/","/VerListaEmpresas"})
     public String viewEmpresas(Model model){
         List<Empresa> listaEmpresas=empresaServi.getAllEmpresa();
@@ -35,14 +40,14 @@ public class Controlador {
     }
     @GetMapping("/AgregarEmpresas")
     public String newEmpresa(Model model){
-        Empresa empr= new Empresa();
-        model.addAttribute("empr", empr);
+        Empresa emp= new Empresa();
+        model.addAttribute("emp", emp);
         return "agregarEmpresa";
     }
 
     @PostMapping("/GuardarEmpresa")
-    public String guardarEmpresa(Empresa empr, RedirectAttributes redirectAttributes){
-        if(empresaServi.saveOrUpdateEmpresa(empr)==true){
+    public String guardarEmpresa(Empresa emp, RedirectAttributes redirectAttributes){
+        if(empresaServi.saveOrUpdateEmpresa(emp)==true){
             redirectAttributes.addFlashAttribute("mensaje","saveOK");
             return "redirect:/VerListaEmpresas";
         }
@@ -52,22 +57,22 @@ public class Controlador {
 
     @GetMapping("/EditarEmpresa/{id}")
     public String editarEmpresa(Model model, @PathVariable Integer id, @ModelAttribute("mensaje") String mensaje){
-        Empresa empr=empresaServi.getEmpresaById(id);
+        Empresa emp=empresaServi.getEmpresaById(id);
         //Creamos un atributo para el modelo, que se llame igualmente emp y es el que ira al html para llenar o alimentar campos
-        model.addAttribute("empr", empr);
+        model.addAttribute("emp", emp);
         model.addAttribute("mensaje", mensaje);
         return "editarEmpresa";
     }
 
 
     @PostMapping("/ActualizarEmpresa")
-    public String updateEmpresa(@ModelAttribute("empr") Empresa empr, RedirectAttributes redirectAttributes){
-        if(empresaServi.saveOrUpdateEmpresa(empr)){
+    public String updateEmpresa(@ModelAttribute("emp") Empresa emp, RedirectAttributes redirectAttributes){
+        if(empresaServi.saveOrUpdateEmpresa(emp)){
             redirectAttributes.addFlashAttribute("mensaje","updateOK");
             return "redirect:/VerListaEmpresas";
         }
         redirectAttributes.addFlashAttribute("mensaje","updateError");
-        return "redirect:/EditarEmpresa/"+empr.getId();
+        return "redirect:/EditarEmpresa/"+emp.getId();
 
     }
 
@@ -81,6 +86,7 @@ public class Controlador {
                 return "redirect:/VerListaEmpresas";
 
         }
+//empleado
 
     @GetMapping("/VerListaEmpleados")
     public String verEmpresas(Model model, @ModelAttribute("mensaje") String mensaje) {
@@ -101,12 +107,14 @@ public class Controlador {
     }
 
     @PostMapping("/GuardarEmpleado")
-    public String guardarEmpleado(Empleado empl, RedirectAttributes redirectAttributes) {
-        if(empleadoServi.saveOrUpdateEmpleado(empl)) {
-            redirectAttributes.addFlashAttribute("mensaje", "guaradado");
+    public String guardarEmpleado(Empleado empl, RedirectAttributes redirectAttributes){
+        String passEncriptada=passwordEncoder().encode(empl.getPassword());
+        empl.setPassword(passEncriptada);
+        if(empleadoServi.saveOrUpdateEmpleado(empl)==true) {
+            redirectAttributes.addFlashAttribute("mensaje", "saveOK");
             return "redirect:/VerListaEmpleados";
         }
-        redirectAttributes.addFlashAttribute("mensaje", "errorGuardar" );
+        redirectAttributes.addFlashAttribute("mensaje", "saveError" );
         return "redirect:/AgregarEmpleados";
     }
 
@@ -124,30 +132,36 @@ public class Controlador {
 
 
     @PostMapping("/ActualizarEmpleado")
-    public String actualizarEmpresa(@ModelAttribute("empl") Empleado empl, RedirectAttributes redirectAttributes){
-        if(empleadoServi.saveOrUpdateEmpleado(empl)){
-            redirectAttributes.addFlashAttribute("mensaje","actualizado");
-            return "redirect:/VerListaEmpleados";
+    public String updateEmpleado(@ModelAttribute("empl") Empleado empl, RedirectAttributes redirectAttributes) {
+        Integer id = empl.getId();
+        String Oldpass=empleadoServi.getEmpleadoById(id).getPassword(); /*get*/
+        if (!empl.getPassword().equals(Oldpass)) {
+            String passEncriptada=passwordEncoder().encode(empl.getPassword());
+            empl.setPassword(passEncriptada);
         }
-        redirectAttributes.addFlashAttribute("mensaje","Error al actualizar la empresa");
-        return "redirect:/EditarEmpleado/" + empl.getId();
-    }
+        if (empleadoServi.saveOrUpdateEmpleado(empl)) {
+            redirectAttributes.addFlashAttribute("mensaje", "updateOK");
+            return "redirect:/VerListaEmpleados";
+            }
+            redirectAttributes.addFlashAttribute("mensaje", "updateError");
+            return "redirect:/EditarEmpleado/" + empl.getId();
+        }
 
 
     @GetMapping("/EliminarEmpleado/{id}")
     public String eliminarEmpleado(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         if(empleadoServi.deleteEmpleado(id)){
-            redirectAttributes.addFlashAttribute("mensaje","eliminado");
+            redirectAttributes.addFlashAttribute("mensaje","deleteOK");
             return "redirect:/VerListaEmpleados";
         }
-        redirectAttributes.addFlashAttribute("mensaje","errorDelete");
+        redirectAttributes.addFlashAttribute("mensaje","deleteError");
         return "redirect:/VerListaEmpleados";
     }
 
     //Filtrar empleados por empresa
     @GetMapping("/Empresa/{id}/Empleados")
     public String verEmpleadosByEmpresa(@PathVariable("id") Integer id, Model model){
-        List<Empleado> listaEmpleados = empleadoServi.empleadosByEmpresa(id);
+        List<Empleado> listaEmpleados = empleadoServi.obtenerPorEmpresa(id);;
         model.addAttribute("listEmpl", listaEmpleados);
 
         return "verListaEmpleados";
@@ -177,7 +191,7 @@ public class Controlador {
     @PostMapping("/GuardarMovimiento")
     public String guardarMovimiento(MovimientoDeDinero mov, RedirectAttributes redirectAttributes) {
         if(movimientosServi.saveOrUpdateMovimiento(mov)) {
-            redirectAttributes.addFlashAttribute("mensaje", "guaradado");
+            redirectAttributes.addFlashAttribute("mensaje", "guardado");
             return "redirect:/VerMovimientos";
         }
         redirectAttributes.addFlashAttribute("mensaje", "errorGuardar" );

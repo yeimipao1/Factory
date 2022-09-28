@@ -15,14 +15,14 @@ public class Empresa {
 
     private String direccion;
 
-    private int telefono;
+    private long telefono;
 
     private String NIT;
 
     public Empresa() {
     }
 
-    public Empresa(String nombreEmpresa, String direccion, int telefono, String NIT) {
+    public Empresa(String nombreEmpresa, String direccion, long telefono, String NIT) {
         this.nombreEmpresa = nombreEmpresa;
         this.direccion = direccion;
         this.telefono = telefono;
@@ -53,11 +53,11 @@ public class Empresa {
         this.direccion = direccion;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 

@@ -66,37 +66,30 @@
 
 
 <script th:inline="javascript">
-    window.onload = function(){
+   window.onload=function(){
 
-        var msm = [[${mensaje}]];
-        if(msm == "guardada"){
-           Command : toastr["success"]("Empresa creada")
-           }
-
-        else if (msm == "actualizada"){
-            Command : toastr["success"]("Empresa actualizada")
-        }
-
-        else if (msm == "eliminada"){
-            Command : toastr["danger"]("Empresa eliminada")
-        }
-
-        else if (msm == "errorDelete"){
-            Command : toastr["error"]("Error al eliminar la empresa")
-        }
-
-
-            toastr.options={
-
-                "positionClass" : "toast-top-right",
-                "showDuration" : "300",
-                "showMethod" : "fadeIn",
-                "showMethod" : "fadeOut",
-
+        var msg= [[${mensaje}]];
+        if (msg == "guardar"){
+            Command : toastr["success"]("Empleado registrado con éxito!")
             }
+        else if (msg == "updateOK"){
+            Command : toastr["success"]("Empleado actualizado con éxito!")
+        }
+        else if (msg == "deleteOK"){
+            Command : toastr["error"]("Registro de empleado eliminado con éxito!")
+        }
+        else if (msg == "deleteError"){
+            Command : toastr["error"]("Registro de empleado no ha sido eliminado!")
+        }
+        toastr.options={
+            "positionClass": "toast-top-right",
+            "showDuration":"300",
+            "showMethod":"fadeIn",
+            "hideMethod":"fadeOut",
+        }
+
 
     }
-
 
 </script>
 

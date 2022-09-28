@@ -15,6 +15,8 @@ public class EmpleadoServi {
 
     @Autowired
     EmpleadoRepo empleadoRepo;
+    @Autowired
+    EmpresaRepo empresaRepo;
 
     //Metodo para ver todos los empleados
 
@@ -30,24 +32,19 @@ public class EmpleadoServi {
         return empleadoRepo.findById(id).get();
     }
 
-    //Metodo para buscar empleados por ID
-    /*public Optional<Empleado> getEmpleadoById(Integer id){ //Existe optional y asi se podria usar
+    //Metodo para buscar empleados por empresa
+    public ArrayList<Empleado> obtenerPorEmpresa(Integer id){
+        return empleadoRepo.findByEmpresa(id);
+    }
 
-        return empleadoRepo.findById(id);
-    }*/
-
-
-    public boolean saveOrUpdateEmpleado(Empleado empleado){
-        Empleado empl=empleadoRepo.save(empleado);
-        if (empleadoRepo.findById(empl.getId())!=null){
+    //Metodo para guardar o actualizar registros en Empleados
+    public boolean saveOrUpdateEmpleado(Empleado empl){
+        Empleado emp=empleadoRepo.save(empl);
+        if (empleadoRepo.findById(emp.getId())!=null){
             return true;
         }
         return false;
     }
-    /*public Empleado saveOrUpdateEmpleado(Empleado empleado){//es para el @RestController
-        Empleado empl=empleadoRepo.save(empleado);
-        return empl;
-    }*/
 
     //Metod para eliminar un empleado por el ID
 
@@ -60,7 +57,7 @@ public class EmpleadoServi {
     }
 
     //Método para ver los empleados que tiene cierta empresa
-    public ArrayList<Empleado> empleadosByEmpresa(Integer id){
+    public ArrayList<Empleado> empleadosByEmpresa (Integer id){
         return empleadoRepo.findByEmpresa(id);
     }
 
