@@ -263,6 +263,7 @@ public class Controlador {
 
 
     //Metodo para encriptar contraseñas
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
